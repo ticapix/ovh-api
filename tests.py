@@ -1,9 +1,11 @@
+#!/usr/bin/env python3
 
 from tornado.testing import AsyncHTTPTestCase, main
 import unittest
 import json
 import service.main as service
 import yaml
+
 
 class TestServiceApp(AsyncHTTPTestCase):
     def get_app(self):
@@ -14,17 +16,17 @@ class TestServiceApp(AsyncHTTPTestCase):
         self.assertEqual(response.code, 400)
 
     def test_wrong_endpoint(self):
-        response = self.fetch('/api/{}/wrong/path'.format(list(service.ENDPOINTS)[0]))
+        response = self.fetch('/api/{}/wrong/path'.format('ovh-eu'))
         self.assertEqual(response.code, 400)
 
     def test_all_paths(self):
-        response = self.fetch('/api/{}/'.format(list(service.ENDPOINTS)[0]))
+        response = self.fetch('/api/{}/'.format('ovh-eu'))
         self.assertEqual(response.code, 200)
         res = yaml.load(response.body)
         self.assertTrue('/me' in res['paths'])
 
     def test_api_me(self):
-        response = self.fetch('/api/{}/me'.format(list(service.ENDPOINTS)[0]))
+        response = self.fetch('/api/{}/me'.format('ovh-eu'))
         self.assertEqual(response.code, 200)
         res = yaml.load(response.body)
         # self.assertTrue('/me' in res['paths'])
