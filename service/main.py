@@ -7,9 +7,10 @@ from tornado import gen
 import tornado.log
 import logging
 import json
-from aiocache import cached
+from aiocache import cached, MemcachedCache
 import yaml
 from .convert import convert_api_to_oa3
+from .cache import DetectCache
 
 # Extracted from https://github.com/ovh/python-ovh/blob/6e9835d205bb322e3357bebdbef3e1f74cb629da/ovh/client.py#L74 
 ENDPOINTS = {
@@ -22,17 +23,19 @@ ENDPOINTS = {
     'soyoustart-ca': 'https://ca.api.soyoustart.com/1.0',
 }
 
-CACHE_TTL = 3600 # seconds
-
+CACHE = {
+    'ttl': 3600, # seconds
+    'cache': DetectCache()
+}
 
 logger = logging.getLogger('tornado.access')
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("Hello, world")
 
-@cached(ttl=CACHE_TTL)
+@cached(**CACHE)
 async def fetch(url: str):
     logger.info('fetching {}'.format(url))
     client = AsyncHTTPClient()
@@ -41,7 +44,7 @@ async def fetch(url: str):
         raise HTTPError(500, reason='origin server {} return an error {}'.format(url, res.code))
     return json.loads(res.body)
 
-@cached(ttl=CACHE_TTL)
+@cached(**CACHE)
 async def convert_to_openapi3(doc):
     return convert_api_to_oa3(doc)
 
