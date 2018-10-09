@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-import json
-from pathlib import Path
-import yaml
-import requests
+# import json
+# from pathlib import Path
+# import yaml
+# import requests
 
-from datetime import timedelta
+# from datetime import timedelta
 
 def gen_model_path(model):
     return '#/components/schemas/{}'.format(model)
@@ -148,15 +148,15 @@ def convert_api_to_oa3(api_json):
 #     'dedicatedCloud': json.load(open(Path('schema') / 'apis-dedicatedCloud.json', 'r')),
 #     }
 
-if __name__ == '__main__':
-    apis = requests.get('https://api.ovh.com/1.0/').json()
-    api_base = apis['basePath']
-    for api in apis['apis']:
-        api_path = '{}{}.json'.format(api_base, api['path'])
-        api_name = api['path'].strip('/').replace('/', '_')
-        print(api_path)
-        print(api_name)
-        api = requests.get(api_path).json()
-        json.dump(api, open(Path('schemas') / 'ovh' / 'apis-{}.json'.format(api_name), 'w'))
-        api_swagger = convert_api_to_oa3(api)
-        yaml.dump(api_swagger, open(Path('schemas') / 'oa3' / 'apis-{}.yml'.format(api_name), 'w'), allow_unicode=True, default_flow_style=False)
+# if __name__ == '__main__':
+#     apis = requests.get('https://api.ovh.com/1.0/').json()
+#     api_base = apis['basePath']
+#     for api in apis['apis']:
+#         api_path = '{}{}.json'.format(api_base, api['path'])
+#         api_name = api['path'].strip('/').replace('/', '_')
+#         print(api_path)
+#         print(api_name)
+#         api = requests.get(api_path).json()
+#         json.dump(api, open(Path('schemas') / 'ovh' / 'apis-{}.json'.format(api_name), 'w'))
+#         api_swagger = convert_api_to_oa3(api)
+#         yaml.dump(api_swagger, open(Path('schemas') / 'oa3' / 'apis-{}.yml'.format(api_name), 'w'), allow_unicode=True, default_flow_style=False)
