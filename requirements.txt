@@ -1,0 +1,3 @@
+PyYAML==3.13
+aiocache==0.10.0
+tornado==5.1.1
