@@ -2,3 +2,4 @@ PyYAML==3.13
 aiocache==0.10.0
 aiomcache==0.6.0
 tornado==5.1.1
+msgpack==0.5.6
