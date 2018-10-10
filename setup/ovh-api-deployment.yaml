@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ovh-api-deployment
+  # labels:
+  #   app: memcached
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ovh-api-pod
+  template:
+    metadata:
+      labels:
+        app: ovh-api-pod
+    spec:
+      containers:
+      - name: ovh-api-cnt
+        image: ticapix/ovh-api:latest
+        ports:
+        - containerPort: 8000
+      - env:
+        - name: MEMCACHED_PORT
+          value: "11211"
+        - name: MEMCACHED_HOST
+          value: "memcached-srv"

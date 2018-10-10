@@ -60,9 +60,9 @@ $remote kubectl get nodes -o json | jq '.items | length' | grep -v '0'
 
 cat setup/memcached-deployment.yaml | $remote kubectl apply -f -
 cat setup/memcached-service.yaml | $remote kubectl apply -f -
-
-
 $remote kubectl get pods -l app=memcached-pod -o wide
+
+cat setup/ovh-api-deployment.yaml | $remote kubectl apply -f -
 
 echo "OK"
 exit
