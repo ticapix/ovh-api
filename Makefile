@@ -13,4 +13,4 @@ run: install
 	python run.py
 
 test: install
-	ASYNC_TEST_TIMEOUT=20 python tests.py
+	ASYNC_TEST_TIMEOUT=20 python -m tornado.testing tests

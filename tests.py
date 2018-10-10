@@ -1,13 +1,9 @@
-#!/usr/bin/env python3
-
-from tornado.testing import AsyncHTTPTestCase, main
-import unittest
-import json
+from tornado.testing import AsyncHTTPTestCase
 import service.main as service
 import yaml
 
 
-class TestServiceApp(AsyncHTTPTestCase):
+class TestServiceApi(AsyncHTTPTestCase):
     def get_app(self):
         return service.make_app()
 
@@ -31,11 +27,12 @@ class TestServiceApp(AsyncHTTPTestCase):
         res = yaml.load(response.body)
         # self.assertTrue('/me' in res['paths'])
 
+class TestServiceApp(AsyncHTTPTestCase):
+    def get_app(self):
+        return service.make_app()
 
     def test_homepage(self):
         response = self.fetch('/')
         self.assertEqual(response.code, 200)
         self.assertEqual(response.body, b'Hello, world')
 
-if __name__ == '__main__':
-    unittest.main()
