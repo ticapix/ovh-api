@@ -24,6 +24,8 @@ test: install
 	which python
 	ASYNC_TEST_TIMEOUT=20 python tests.py
 
+# docker-build:
+# 	docker build --tag ovh-api .
 # convert: install # validate yaml
 # 	$(PY_ENV)/bin/python ./convert.py
 
