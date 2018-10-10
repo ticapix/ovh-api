@@ -1,13 +1,11 @@
 FROM python:3-alpine
 
-RUN apt-get update && apt-get install -y --no-install-recommends make
-
 COPY requirements.txt /
 COPY run.py /
 COPY service /
 
-RUN make install
+RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-CMD ["make", "run"]
+CMD ["python", "run.py"]
