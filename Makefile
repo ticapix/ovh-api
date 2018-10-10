@@ -10,6 +10,8 @@ help: # usage
 
 $(PY_ENV):
 	python3 -m venv $(PY_ENV)
+	ls $(PY_ENV)
+	ls $(PY_ENV)/bin/
 	$(PY_ENV)/bin/pip install --upgrade pip
 	$(PY_ENV)/bin/pip install -r requirements.txt
 
