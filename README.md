@@ -24,6 +24,8 @@ make test
 docker pull ticapix/ovh-api
 ```
 
+The exposed port is `8000`
+
 ## Configuration
 
 Default cache TTL is `3600` seconds. This value can be changed with the environment variable `CACHE_TTL`
@@ -32,5 +34,5 @@ Default cache TTL is `3600` seconds. This value can be changed with the environm
 
 If available, [Memcached](https://memcached.org/) is used to cache intermediate convertion results.
 
-Memcached is configuration can be tuned with `MEMCACHE_PORT` and `MEMCACHE_HOST` environment variables.
+Memcached is configuration can be tuned with `MEMCACHED_PORT` and `MEMCACHED_HOST` environment variables.
 
