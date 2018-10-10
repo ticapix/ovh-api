@@ -6,12 +6,11 @@ import os
 
 def DetectCache(cache: Dict) -> Dict:
     cache['cache'] = SimpleMemoryCache
-    s = socket.socket()
-    s.settimeout(1)   # timeout in seconds
+    mem_port = int(os.getenv('MEMCACHE_PORT', '11211'))
+    mem_host = os.getenv('MEMCACHE_HOST', '127.0.0.1')
     try:
-        mem_port = int(os.getenv('MEMCACHE_PORT', '11211'))
-        mem_host = os.getenv('MEMCACHE_HOST', '127.0.0.1')
-        s.connect((mem_host, mem_port))
+        conn = socket.create_connection((mem_host, mem_port), timeout=1)
+        print(conn)
         cache['cache'] = MemcachedCache
         cache['endpoint'] = mem_host
         cache['port'] = mem_port
