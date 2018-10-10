@@ -1,4 +1,4 @@
-PY_ENV=venv3
+PY_ENV=./venv3
 # NPM_BIN=$(shell npm bin)
 
 
