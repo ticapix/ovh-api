@@ -8,20 +8,21 @@ help: # usage
 # $(NPM_BIN):
 # 	npm install
 
+export PATH := $(PY_ENV)/bin:$(PATH)
+
 $(PY_ENV):
 	python3 -m venv $(PY_ENV)
-	ls $(PY_ENV)
-	ls $(PY_ENV)/bin/
-	$(PY_ENV)/bin/pip install --upgrade pip
-	$(PY_ENV)/bin/pip install -r requirements.txt
+	pip install --upgrade pip
+	pip install -r requirements.txt
 
 install: $(PY_ENV) # $(NPM_BIN)  install deps
 
 run: install
-	$(PY_ENV)/bin/python run.py
+	python run.py
 
 test: install
-	ASYNC_TEST_TIMEOUT=20 $(PY_ENV)/bin/python tests.py
+	which python
+	ASYNC_TEST_TIMEOUT=20 python tests.py
 
 # convert: install # validate yaml
 # 	$(PY_ENV)/bin/python ./convert.py
