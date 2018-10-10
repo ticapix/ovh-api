@@ -130,8 +130,8 @@ def convert_api_to_oa3(api_json):
     return {
         'openapi': '3.0.0',
         'info': {
-            'version': '1.0.0',
-            'title': 'Swagger OVH API for {}'.format(api_json['basePath']),
+            'version': api_json['apiVersion'],
+            'title': 'Swagger OVH API for {}/{}'.format(api_json['basePath'], api_json['resourcePath']),
             'license': {
                 'name': 'OVH'
             }
