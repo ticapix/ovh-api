@@ -1,10 +1,9 @@
 
 from aiocache import SimpleMemoryCache, MemcachedCache
 import socket
-from typing import Dict
 import os
 
-def DetectCache(cache: Dict) -> Dict:
+def DetectCache(cache: dict) -> dict:
     cache['cache'] = SimpleMemoryCache
     mem_port = int(os.getenv('MEMCACHE_PORT', '11211'))
     mem_host = os.getenv('MEMCACHE_HOST', '127.0.0.1')

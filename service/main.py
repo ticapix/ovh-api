@@ -13,6 +13,7 @@ from .convert import convert_api_to_oa3
 from .cache import DetectCache
 import os
 
+
 # Extracted from https://github.com/ovh/python-ovh/blob/6e9835d205bb322e3357bebdbef3e1f74cb629da/ovh/client.py#L74 
 ENDPOINTS = {
     'ovh-eu': 'https://eu.api.ovh.com/1.0',
@@ -50,8 +51,8 @@ async def fetch(url: str):
         raise HTTPError(500, reason='origin server {} return an error {}'.format(url, res.code))
     return json.loads(res.body)
 
-@cached(**CACHE)
-async def convert_to_openapi3(doc):
+@cached(key_builder=lambda doc: 'resourcePath-{}'.format(doc['resourcePath']), **CACHE)
+async def convert_to_openapi3(doc: dict) -> dict:
     return convert_api_to_oa3(doc)
 
 class ApiHandler(tornado.web.RequestHandler):
