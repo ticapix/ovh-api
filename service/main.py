@@ -77,7 +77,7 @@ class ApiHandler(tornado.web.RequestHandler):
         api_oa3 = await convert_to_openapi3(api_json)
         self.write(yaml.dump(api_oa3))
 
-def make_app(autoreload=False):
+def make_app(autoreload=False: bool):
     logger.info('Cache config is {}'.format(CACHE))
     return tornado.web.Application([
         (r"/", MainHandler),
