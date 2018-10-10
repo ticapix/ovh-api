@@ -10,7 +10,7 @@ def DetectCache(cache: Dict) -> Dict:
     s.settimeout(1)   # timeout in seconds
     try:
         mem_port = int(os.getenv('MEMCACHE_PORT', '11211'))
-        mem_host = os.getenv('MEMCACHE_HOST', '11211')
+        mem_host = os.getenv('MEMCACHE_HOST', '127.0.0.1')
         s.connect((mem_host, mem_port))
         cache['cache'] = MemcachedCache
         cache['endpoint'] = mem_host
