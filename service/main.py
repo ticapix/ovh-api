@@ -11,6 +11,7 @@ from aiocache import cached, MemcachedCache
 import yaml
 from .convert import convert_api_to_oa3
 from .cache import DetectCache
+import os
 
 # Extracted from https://github.com/ovh/python-ovh/blob/6e9835d205bb322e3357bebdbef3e1f74cb629da/ovh/client.py#L74 
 ENDPOINTS = {
@@ -24,9 +25,10 @@ ENDPOINTS = {
 }
 
 CACHE = {
-    'ttl': 3600, # seconds
-    'cache': DetectCache()
+    'ttl': int(os.getenv('CACHE_TTL', '3600')), # seconds
 }
+
+CACHE = DetectCache(CACHE)
 
 logger = logging.getLogger('tornado.access')
 logger.setLevel(logging.INFO)
@@ -71,6 +73,7 @@ class ApiHandler(tornado.web.RequestHandler):
         self.write(yaml.dump(api_oa3))
 
 def make_app(autoreload=False):
+    logger.info('Cache config is {}'.format(CACHE))
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/api/([\w-]+)/(.*)", ApiHandler)
