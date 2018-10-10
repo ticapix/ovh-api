@@ -5,12 +5,12 @@ set -x
 remote="ssh -t -i $HOME/.ssh/ovh_public_cloud root@vps381417.ovh.net"
 
 set +e
-which curl
+which jq
 check=$?
 set -e
 if [ $check -ne 0 ]; then
     sudo apt-get update
-    sudo apt-get install -y jq
+    sudo apt-get install --no-install-recommends -y jq
 fi
 
 $remote hostname
@@ -57,8 +57,12 @@ if [ $check -ne 0 ]; then
 fi
 
 $remote kubectl get nodes -o json | jq '.items | length' | grep -v '0'
-# $remote "curl --insecure https://127.0.0.1:8443 | jq '.'"
 
+cat setup/memcached-deployment.yaml | $remote kubectl apply -f -
+cat setup/memcached-service.yaml | $remote kubectl apply -f -
+
+
+$remote kubectl get pods -l app=memcached-pod -o wide
 
 echo "OK"
 exit
