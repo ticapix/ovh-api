@@ -1,6 +1,7 @@
 language: python
 services:
   - docker
+  - memcached
 python:
   - "3.6"
 install:

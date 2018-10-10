@@ -18,6 +18,12 @@ make run
 make test
 ```
 
+## Docker deployement
+
+```shell
+docker pull ticapix/ovh-api
+```
+
 ## Configuration
 
 Default cache TTL is `3600` seconds. This value can be changed with the environment variable `CACHE_TTL`
