@@ -1,12 +1,16 @@
 from tornado.testing import AsyncHTTPTestCase
+from tornado.ioloop import IOLoop
 import service.main as service
 import yaml
 
-
-class TestServiceApi(AsyncHTTPTestCase):
+class TestService(AsyncHTTPTestCase):
     def get_app(self):
         return service.make_app()
 
+    def get_new_ioloop(self):
+        return IOLoop.current()
+
+class TestServiceApi(TestService):
     def test_wrong_endpoint(self):
         response = self.fetch('/api/endpoint/wrong/path')
         self.assertEqual(response.code, 400)
@@ -27,10 +31,7 @@ class TestServiceApi(AsyncHTTPTestCase):
         res = yaml.load(response.body)
         # self.assertTrue('/me' in res['paths'])
 
-class TestServiceApp(AsyncHTTPTestCase):
-    def get_app(self):
-        return service.make_app()
-
+class TestServiceApp(TestService):
     def test_homepage(self):
         response = self.fetch('/')
         self.assertEqual(response.code, 200)
