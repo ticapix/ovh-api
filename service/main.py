@@ -30,6 +30,10 @@ CACHE = {
 
 CACHE = DetectCache(CACHE)
 
+# until there is a better officialy mime type here http://www.iana.org/assignments/media-types/media-types.xhtml 
+YAML_CONTENT_TYPE='application/x-yaml'
+
+
 logger = logging.getLogger('tornado.access')
 logger.setLevel(logging.INFO)
 
@@ -52,6 +56,7 @@ async def convert_to_openapi3(doc):
 
 class ApiHandler(tornado.web.RequestHandler):
     async def get(self, endpoint: str, path: str):
+        self.set_header('Content-Type', YAML_CONTENT_TYPE)
         if endpoint not in ENDPOINTS.keys():
             raise HTTPError(400, reason='invalid endpoing. Valid endpoints are {}'.format(', '.join(ENDPOINTS.keys())))
         endpoint_url = ENDPOINTS[endpoint]
