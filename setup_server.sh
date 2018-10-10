@@ -4,15 +4,24 @@ set -e
 set -x
 remote="ssh -t -i $HOME/.ssh/ovh_public_cloud root@vps381417.ovh.net"
 
+set +e
+which curl
+check=$?
+set -e
+if [ $check -ne 0 ]; then
+    sudo apt-get update
+    sudo apt-get install -y jq
+fi
+
 $remote hostname
 
 set +e
-$remote which curl jq
+$remote which curl
 check=$?
 set -e
 if [ $check -ne 0 ]; then
     $remote apt-get update
-    $remote apt-get install -y jq curl
+    $remote apt-get install -y curl
 fi
 
 set +e
@@ -30,25 +39,28 @@ if [ $check -ne 0 ]; then
 fi
 
 set +e
-$remote which minicube
+$remote which minikube
 check=$?
 set -e
 if [ $check -ne 0 ]; then
     echo Install Minikube v0.30.0
-    $remote curl --location --output /usr/local/bin/minicube https://github.com/kubernetes/minikube/releases/download/v0.30.0/minikube-linux-amd64
-    $remote chmod +x /usr/local/bin/minicube
+    $remote curl --location --output /usr/local/bin/minikube https://github.com/kubernetes/minikube/releases/download/v0.30.0/minikube-linux-amd64
+    $remote chmod +x /usr/local/bin/minikube
 fi
 
 set +e
-$remote minicube status
+$remote minikube status
 check=$?
 set -e
 if [ $check -ne 0 ]; then
-    $remote minicube start --vm-driver=none
+    $remote minikube start --vm-driver=none
 fi
 
-$remote "curl --insecure https://127.0.0.1:8443 | jq '.'"
+$remote kubectl get nodes -o json | jq '.items | length' | grep -v '0'
+# $remote "curl --insecure https://127.0.0.1:8443 | jq '.'"
 
+
+echo "OK"
 exit
 
 $remote 'echo deb http://deb.debian.org/debian/ buster non-free contrib main > /etc/apt/sources.list.d/buster.list'
