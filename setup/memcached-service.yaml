@@ -2,8 +2,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: memcached-srv
-  name: memcached-srv
+    service: memcached
+  name: memcached-svr
 spec:
   # clusterIP: None  # Headless service
   ports:
@@ -11,4 +11,4 @@ spec:
     protocol: TCP
     targetPort: 11211
   selector:
-    app: memcached-pod
+    pod: memcached

@@ -8,11 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: memcached-pod
+      pod: memcached
   template:
     metadata:
       labels:
-        app: memcached-pod
+        pod: memcached
     spec:
       containers:
       - name: memcached-cnt
