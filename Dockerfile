@@ -1,8 +1,13 @@
 FROM python:3-alpine
 
-COPY requirements.txt /
-COPY run.py /
-COPY service /
+
+RUN mkdir /app
+
+WORKDIR /app
+
+COPY requirements.txt .
+COPY run.py .
+COPY service ./service
 
 RUN pip install -r requirements.txt
 
