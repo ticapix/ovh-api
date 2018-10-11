@@ -59,12 +59,15 @@ fi
 $remote kubectl get nodes -o json | jq '.items | length' | grep -v '0'
 
 cat setup/memcached-deployment.yaml | $remote kubectl apply -f -
-$remote kubectl get pods -l pod=memcached -o json | jq '.items | length' | grep -v '0'
+$remote kubectl get pod -l pod=memcached -o json | jq '.items | length' | grep -v '0'
+$remote kubectl get deployment -l deployment=memcached -o json | jq '.items | length' | grep -v '0'
+
 cat setup/memcached-service.yaml | $remote kubectl apply -f -
 $remote kubectl get service -l service=memcached -o json | jq '.items | length' | grep -v '0'
 
 cat setup/ovh-api-deployment.yaml | $remote kubectl apply -f -
-$remote kubectl get pods -l pod=ovh-api -o json | jq '.items | length' | grep -v '0'
+$remote kubectl get pod -l pod=ovh-api -o json | jq '.items | length' | grep -v '0'
+$remote kubectl get deployment -l deployment=ovh-api -o json | jq '.items | length' | grep -v '0'
 
 echo "OK"
 exit
