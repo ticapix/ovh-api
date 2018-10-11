@@ -19,7 +19,7 @@ spec:
         image: ticapix/ovh-api:latest
         ports:
         - containerPort: 8000
-      - env:
+        env:
         - name: MEMCACHED_PORT
           value: "11211"
         - name: MEMCACHED_HOST
