@@ -8,11 +8,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ovh-api-pod
+      pod: ovh-api
   template:
     metadata:
       labels:
-        app: ovh-api-pod
+        pod: ovh-api
     spec:
       containers:
       - name: ovh-api-cnt
