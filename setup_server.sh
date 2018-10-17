@@ -69,6 +69,13 @@ cat setup/ovh-api-deployment.yaml | $remote kubectl apply -f -
 $remote kubectl get pod -l pod=ovh-api -o json | jq '.items | length' | grep -v '0'
 $remote kubectl get deployment -l deployment=ovh-api -o json | jq '.items | length' | grep -v '0'
 
+
+
+kube_mgnt_ip=`$remote kubectl get service --namespace kube-system -l app=kubernetes-dashboard -o json | jq -r '.items[0].spec.clusterIP'`
+kube_mgnt_port=`$remote kubectl get service --namespace kube-system -l app=kubernetes-dashboard -o json | jq -r '.items[0].spec.ports[0].port'`
+
+echo $remote -L 8080:$kube_mgnt_ip:$kube_mgnt_port 
+
 echo "OK"
 exit
 
