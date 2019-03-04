@@ -12,6 +12,8 @@ OVH API converter to OpenAPI3
 make run
 ```
 
+And nagivate to http://localhost:8000/api/ovh-eu/me
+
 ## Local testing
 
 ```shell
