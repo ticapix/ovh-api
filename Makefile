@@ -23,6 +23,7 @@ run: install ## local service excusion
 
 lint: install ## run flake8 and mypy
 	. $(VENV_DIR)/bin/activate && flake8
+	. $(VENV_DIR)/bin/activate && mypy ./run.py || true
 
 test: install ## run test and list outdated packages
 	. $(VENV_DIR)/bin/activate && ASYNC_TEST_TIMEOUT=20 python -m tornado.testing tests
