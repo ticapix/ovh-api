@@ -38,4 +38,3 @@ class TestServiceApp(TestService):
     def test_homepage(self):
         response = self.fetch('/')
         self.assertEqual(response.code, 200)
-        self.assertEqual(response.body, b'Hello, world')
