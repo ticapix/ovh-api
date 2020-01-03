@@ -30,3 +30,7 @@ test: install ## run test and list outdated packages
 
 clean: ## remove generated files
 	$(RM) $(VENV_DIR)
+
+docker:
+	docker rmi ticapix/ovh-api:master || true
+	docker build -f Dockerfile -t ticapix/ovh-api:master .
