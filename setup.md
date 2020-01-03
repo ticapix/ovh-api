@@ -122,3 +122,10 @@ spec:
 EOF
 ```
 
+## Update a running deployment
+
+Simply kill the pod and kubernetes will recreate a pod using `latest` tag.
+
+```shell
+kubectl delete pod -l app=ovh-api
+```
