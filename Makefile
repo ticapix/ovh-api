@@ -13,6 +13,8 @@ help:
 
 $(VENV_DIR):
 	$(PYTHON3) -m venv $(VENV_DIR)
+	pwd
+	ls
 	$(VENV_DIR)/bin/pip install --upgrade pip
 	$(VENV_DIR)/bin/pip install -Ur requirements.txt
 
