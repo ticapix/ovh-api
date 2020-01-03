@@ -1,6 +1,5 @@
 PyYAML==5.2
-aiocache==0.11.1
-aiomcache[msgpack,memcached]==0.6.0
+aiocache[memcached,msgpack]
 tornado==6.0.3
 flake8==3.7.9
 flake8-mypy==17.8.0
