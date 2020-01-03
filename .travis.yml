@@ -2,6 +2,10 @@ language: python
 services:
   - docker
   - memcached
+
+compiler:
+  - gcc
+
 python:
   - "3.6"
   - "3.7"
