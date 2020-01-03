@@ -3,18 +3,16 @@ import tornado
 import tornado.ioloop
 from tornado.web import HTTPError
 from tornado.httpclient import AsyncHTTPClient
-from tornado import gen
-import tornado.log
 import logging
 import json
-from aiocache import cached, MemcachedCache
+from aiocache import cached
 import yaml
 from .convert import convert_api_to_oa3
 from .cache import DetectCache
 import os
 
 
-# Extracted from https://github.com/ovh/python-ovh/blob/6e9835d205bb322e3357bebdbef3e1f74cb629da/ovh/client.py#L74 
+# Extracted from https://github.com/ovh/python-ovh/blob/6e9835d205bb322e3357bebdbef3e1f74cb629da/ovh/client.py#L74
 ENDPOINTS = {
     'ovh-eu': 'https://eu.api.ovh.com/1.0',
     'ovh-us': 'https://api.ovhcloud.com/1.0',
@@ -26,21 +24,27 @@ ENDPOINTS = {
 }
 
 CACHE = {
-    'ttl': int(os.getenv('CACHE_TTL', '3600')), # seconds
+    'ttl': int(os.getenv('CACHE_TTL', '3600')),  # seconds
 }
 
 CACHE = DetectCache(CACHE)
 
-# until there is a better officialy mime type here http://www.iana.org/assignments/media-types/media-types.xhtml 
-YAML_CONTENT_TYPE='application/x-yaml'
+# until there is a better officialy mime type here http://www.iana.org/assignments/media-types/media-types.xhtml
+# YAML_CONTENT_TYPE = 'text/html'
+YAML_CONTENT_TYPE = 'application/x-yaml'
 
+logging.getLogger('tornado.access').setLevel(logging.INFO)
+logging.getLogger('tornado.application').setLevel(logging.INFO)
+logging.getLogger('tornado.general').setLevel(logging.INFO)
 
-logger = logging.getLogger('tornado.access')
-logger.setLevel(logging.INFO)
+logger = logging.getLogger("ovh-oa3")
+logger.setLevel(logging.DEBUG)
+
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
         self.write("Hello, world")
+
 
 @cached(**CACHE)
 async def fetch(url: str):
@@ -51,9 +55,11 @@ async def fetch(url: str):
         raise HTTPError(500, reason='origin server {} return an error {}'.format(url, res.code))
     return json.loads(res.body)
 
-@cached(key_builder=lambda doc: 'resourcePath-{}'.format(doc['resourcePath']), **CACHE)
+
+@cached(key_builder=lambda _, doc: 'resourcePath-{}'.format(doc['resourcePath']), **CACHE)
 async def convert_to_openapi3(doc: dict) -> dict:
     return convert_api_to_oa3(doc)
+
 
 class ApiHandler(tornado.web.RequestHandler):
     async def get(self, endpoint: str, path: str):
@@ -72,16 +78,16 @@ class ApiHandler(tornado.web.RequestHandler):
             }))
             return
         if path not in paths:
-             raise HTTPError(400, reason='unknowed path {}'.format(path))
+            raise HTTPError(400, reason='unknowed path {}'.format(path))
         api_url = '{}{}.json'.format(endpoint_url, path)
         api_json = await fetch(api_url)
         api_oa3 = await convert_to_openapi3(api_json)
         self.write(yaml.dump(api_oa3))
 
-def make_app(autoreload:bool=False):
+
+def make_app(autoreload: bool = False):
     logger.info('Cache config is {}'.format(CACHE))
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/api/([\w-]+)/(.*)", ApiHandler)
     ], autoreload=autoreload)
-
