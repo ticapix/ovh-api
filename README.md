@@ -6,6 +6,14 @@ OVH API converter to OpenAPI3
 
 **Not an official OVH project**
 
+## Quick test
+
+An **unmonitored** non-production ready **demo** service is hosted at http://sandbox.apis.ovh/ovh-api/
+
+The url syntax is `http://sandbox.apis.ovh/ovh-api/<region>/<endpoint>`
+
+The available regions are listed here https://github.com/ovh/python-ovh/blob/6e9835d205bb322e3357bebdbef3e1f74cb629da/ovh/client.py#L74
+
 ## Local execution
 
 ```shell

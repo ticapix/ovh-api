@@ -43,7 +43,7 @@ logger.setLevel(logging.DEBUG)
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("Hello, world")
+        self.write("check doc at https://github.com/ticapix/ovh-api")
 
 
 @cached(**CACHE)
