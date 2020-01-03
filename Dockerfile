@@ -1,5 +1,5 @@
 FROM python:3-alpine
-
+RUN apk add build-base
 
 RUN mkdir /app
 
