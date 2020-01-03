@@ -1,7 +1,6 @@
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PYTHON3=python3
-# VENV_DIR=$(ROOT_DIR)/venv3
-VENV_DIR=./venv3  # to make travis happy
+VENV_DIR=$(ROOT_DIR)/venv3
 NAME=$(shell basename $(ROOT_DIR))
 ECHO=@echo
 RM=rm -rf
@@ -14,22 +13,20 @@ help:
 
 $(VENV_DIR):
 	$(PYTHON3) -m venv $(VENV_DIR)
-	ls $(ROOT_DIR)/venv3
-	ls $(ROOT_DIR)/venv3/bin/
-	$(VENV_DIR)/bin/pip install --upgrade pip
-	$(VENV_DIR)/bin/pip install -Ur requirements.txt
+	. $(VENV_DIR)/bin/activate && pip install --upgrade pip
+	. $(VENV_DIR)/bin/activate && pip install -Ur requirements.txt
 
 install: $(VENV_DIR) ## install dependencies
 
 run: install ## local service excusion
-	$(VENV_DIR)/bin/python ./run.py
+	. $(VENV_DIR)/bin/activate && python ./run.py
 
 lint: install ## run flake8 and mypy
-	$(VENV_DIR)/bin/flake8
+	. $(VENV_DIR)/bin/activate && flake8
 
 test: install ## run test and list outdated packages
-	ASYNC_TEST_TIMEOUT=20 $(VENV_DIR)/bin/python -m tornado.testing tests
-	$(VENV_DIR)/bin/pip list --outdated
+	. $(VENV_DIR)/bin/activate && ASYNC_TEST_TIMEOUT=20 python -m tornado.testing tests
+	. $(VENV_DIR)/bin/activate && pip list --outdated
 
 clean: ## remove generated files
 	$(RM) $(VENV_DIR)
