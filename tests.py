@@ -14,21 +14,21 @@ class TestService(AsyncHTTPTestCase):
 
 class TestServiceApi(TestService):
     def test_wrong_region(self):
-        response = self.fetch('/api/endpoint/wrong/path')
+        response = self.fetch('/endpoint/wrong/path')
         self.assertEqual(response.code, 400)
 
     def test_wrong_endpoint(self):
-        response = self.fetch('/api/{}/wrong/path'.format('ovh-eu'))
+        response = self.fetch('/{}/wrong/path'.format('ovh-eu'))
         self.assertEqual(response.code, 400)
 
     def test_all_paths(self):
-        response = self.fetch('/api/{}/'.format('ovh-eu'))
+        response = self.fetch('/{}/'.format('ovh-eu'))
         self.assertEqual(response.code, 200)
         res = yaml.load(response.body, Loader=yaml.SafeLoader)
         self.assertTrue('/me' in res['paths'])
 
     def test_api_me(self):
-        response = self.fetch('/api/{}/me'.format('ovh-eu'))
+        response = self.fetch('/{}/me'.format('ovh-eu'))
         self.assertEqual(response.code, 200)
         res = yaml.load(response.body, Loader=yaml.SafeLoader)
         self.assertTrue('/me/api/application' in res['paths'])

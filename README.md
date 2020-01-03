@@ -12,7 +12,7 @@ OVH API converter to OpenAPI3
 make run
 ```
 
-And nagivate to http://localhost:8000/api/ovh-eu/me
+And nagivate to http://localhost:8000/ovh-eu/me
 
 ## Local testing
 
@@ -38,3 +38,6 @@ If available, [Memcached](https://memcached.org/) is used to cache intermediate 
 
 Memcached configuration can be tuned with `MEMCACHED_PORT` and `MEMCACHED_HOST` environment variables. Default is 127.0.0.1:11211
 
+## Deployement on K8s or K3s
+
+Check the [setup](setup.md) guide.

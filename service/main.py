@@ -89,5 +89,5 @@ def make_app(autoreload: bool = False):
     logger.info('Cache config is {}'.format(CACHE))
     return tornado.web.Application([
         (r"/", MainHandler),
-        (r"/api/([\w-]+)/(.*)", ApiHandler)
+        (r"/([\w-]+)/(.*)", ApiHandler)
     ], autoreload=autoreload)
