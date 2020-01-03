@@ -33,6 +33,12 @@ class TestServiceApi(TestService):
         res = yaml.load(response.body, Loader=yaml.SafeLoader)
         self.assertTrue('/me/api/application' in res['paths'])
 
+    def test_unknown_type(self):
+        response = self.fetch('/ovh-eu/unknown_type')
+        self.assertEqual(response.code, 200)
+        res = yaml.load(response.body, Loader=yaml.SafeLoader)
+        self.assertTrue('unknown_type' in res)
+
 
 class TestServiceApp(TestService):
     def test_homepage(self):

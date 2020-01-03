@@ -7,7 +7,7 @@ import logging
 import json
 from aiocache import cached
 import yaml
-from .convert import convert_api_to_oa3
+from .convert import convert_api_to_oa3, UNKNOWN_TYPE
 from .cache import DetectCache
 import os
 
@@ -37,8 +37,8 @@ logging.getLogger('tornado.access').setLevel(logging.INFO)
 logging.getLogger('tornado.application').setLevel(logging.INFO)
 logging.getLogger('tornado.general').setLevel(logging.INFO)
 
-logger = logging.getLogger("ovh-oa3")
-logger.setLevel(logging.DEBUG)
+logger = logging.getLogger()
+logger.setLevel(os.environ.get("LOGLEVEL", "INFO"))
 
 
 class MainHandler(tornado.web.RequestHandler):
@@ -75,6 +75,11 @@ class ApiHandler(tornado.web.RequestHandler):
         if path == '/':
             self.write(yaml.dump({
                 'paths': paths
+            }))
+            return
+        if path == '/unknown_type':
+            self.write(yaml.dump({
+                'unknown_type': list(UNKNOWN_TYPE)
             }))
             return
         if path not in paths:

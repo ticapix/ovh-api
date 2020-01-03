@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 
 import logging
+from typing import Tuple, Iterable
 
 logger = logging.getLogger(__name__)
+
+UNKNOWN_TYPE = set()
 
 
 def gen_model_path(model):
     return '#/components/schemas/{}'.format(model)
 
 
-def convert_type(type_, model_refs) -> dict:
-    logger.debug("type: {}".format(type_))
+def convert_type(type_: str, model_refs) -> dict:
     type_mapping = {
         'boolean': ('boolean', ),
         'date': ('string', 'date'),
@@ -38,17 +40,18 @@ def convert_type(type_, model_refs) -> dict:
         }
     if type_ != 'string':
         logger.warning("unknown type '{}'".format(type_))
+        UNKNOWN_TYPE.add(type_)
     return {
         'type': 'string'
     }
 
 
-def convert_properties(properties, model_refs):
+def convert_properties(properties, model_refs) -> Iterable[Tuple[str, dict]]:
     for name, property_ in properties.items():
         yield (name, convert_type(property_['type'], model_refs))
 
 
-def convert_model(models, model_refs):
+def convert_model(models, model_refs) -> Iterable[Tuple[str, dict]]:
     for name, model in models.items():
         if 'properties' in model:
             yield (name, {
@@ -68,7 +71,7 @@ def convert_model(models, model_refs):
             pdb.set_trace()
 
 
-def convert_parameter(parameters, model_refs) -> dict:
+def convert_parameter(parameters, model_refs) -> Iterable[dict]:
     for parameter in parameters:
         yield {
             'name': parameter['name'],
@@ -79,7 +82,7 @@ def convert_parameter(parameters, model_refs) -> dict:
         }
 
 
-def convert_body(params, model_refs):
+def convert_body(params, model_refs) -> dict:
     schemas = {
         'type': 'object',
         'properties': {}
@@ -93,7 +96,7 @@ def convert_body(params, model_refs):
     return schemas
 
 
-def convert_operation(operations, model_refs):
+def convert_operation(operations, model_refs) -> Iterable[Tuple[str, dict]]:
     # cat schema/apis-me.json | jq '.apis[].operations[].parameters[] | select(.paramType == "body")' |less
     for operation in operations:
         method = {
@@ -129,12 +132,12 @@ def convert_operation(operations, model_refs):
         yield (operation['httpMethod'].lower(), method)
 
 
-def convert_api_paths(paths, model_refs):
+def convert_api_paths(paths, model_refs) -> Iterable[Tuple[str, dict]]:
     for path in paths:
         yield (path['path'], dict(convert_operation(path['operations'], model_refs)))
 
 
-def convert_api_to_oa3(api_json):
+def convert_api_to_oa3(api_json) -> dict:
     model_refs = list(api_json['models'].keys())
     return {
         'openapi': '3.0.0',
