@@ -1,6 +1,7 @@
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PYTHON3=python3
-VENV_DIR=$(ROOT_DIR)/venv3
+# VENV_DIR=$(ROOT_DIR)/venv3
+VENV_DIR=./venv3  # to make travis happy
 NAME=$(shell basename $(ROOT_DIR))
 ECHO=@echo
 RM=rm -rf
@@ -13,8 +14,8 @@ help:
 
 $(VENV_DIR):
 	$(PYTHON3) -m venv $(VENV_DIR)
-	pwd
-	ls
+	ls $(ROOT_DIR)/venv3
+	ls $(ROOT_DIR)/venv3/bin/
 	$(VENV_DIR)/bin/pip install --upgrade pip
 	$(VENV_DIR)/bin/pip install -Ur requirements.txt
 
