@@ -36,5 +36,5 @@ Default cache TTL is `3600` seconds. This value can be changed with the environm
 
 If available, [Memcached](https://memcached.org/) is used to cache intermediate convertion results.
 
-Memcached is configuration can be tuned with `MEMCACHED_PORT` and `MEMCACHED_HOST` environment variables.
+Memcached configuration can be tuned with `MEMCACHED_PORT` and `MEMCACHED_HOST` environment variables. Default is 127.0.0.1:11211
 
