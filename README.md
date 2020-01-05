@@ -46,6 +46,6 @@ If available, [Memcached](https://memcached.org/) is used to cache intermediate 
 
 Memcached configuration can be tuned with `MEMCACHED_PORT` and `MEMCACHED_HOST` environment variables. Default is 127.0.0.1:11211
 
-## Deployement on K8s or K3s
+## K3s/K8s deployment
 
 Check the [setup](setup.md) guide.
