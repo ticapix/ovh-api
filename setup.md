@@ -100,6 +100,43 @@ EOF
 If you have a domain, you can add an `A` record to your DNS zone.
 Since I have the `apis.ovh` domain, I'm adding the following entry to my DNS zone: `sandbox         IN A      <IPv4>`
 
+### HTTPS Support
+
+Install [acme.sh](https://github.com/Neilpang/acme.sh/wiki/How-to-install) and add additional configuration in `$HOME/.acme.sh/account.conf` (except if you specified another configuration file)
+
+```shell
+# for OVH, check https://github.com/Neilpang/acme.sh/wiki/How-to-use-OVH-domain-api#security
+OVH_AK="XXX"
+OVH_AS="XXX"
+OVH_CK="XXX"
+```
+
+Generate the certificate for the first time. (renewal will be done automatically by the cron job installed by acme.sh installer)
+
+```shell
+acme.sh --issue --dns dns_ovh -d '*.apis.ovh'
+```
+
+Create a shell script name `$HOME/update-secret-sandbox-tls.sh`
+
+```shell
+#!/bin/sh
+kubectl create secret tls sandbox-tls \
+  --key '/home/debian/.acme.sh/*.apis.ovh/*.apis.ovh.key' \
+  --cert '/home/debian/.acme.sh/*.apis.ovh/fullchain.cer' \
+  --save-config --dry-run -o yaml | kubectl apply -f -
+```
+
+Create a crontab job to update the kubernetes secret **after** acme.sh. `crontab -l` should output something like that:
+
+```shell
+38 0 * * * "/home/debian/.acme.sh"/acme.sh --cron --home "/home/debian/.acme.sh" > /dev/null
+40 0 * * * "/home/debian/update-secret-sandbox-tls.sh" > /dev/null
+```
+
+### Ingress
+
+Create the ingress rule.
 
 ```shell
 kubectl apply -f - <<EOF
@@ -111,6 +148,10 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /  # default ingress for k8s
     traefik.ingress.kubernetes.io/rewrite-target: / # default ingress for k3s
 spec:
+  tls:
+  - hosts:
+    - sandbox.apis.ovh
+    secretName: sandbox-tls
   rules:
   - host: sandbox.apis.ovh
     http:
