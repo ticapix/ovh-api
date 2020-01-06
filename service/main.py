@@ -43,7 +43,7 @@ logger.setLevel(os.environ.get("LOGLEVEL", "INFO"))
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("<h1>OVH API description to OpenAPI v3 converter.<h1/><br/><p>Check doc at <a>https://github.com/ticapix/ovh-api</a>.</p>")
+        self.render("default.html")
 
 
 @cached(**CACHE)
