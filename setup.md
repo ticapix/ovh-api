@@ -19,6 +19,7 @@ kubectl apply -f - <<EOF
 EOF
 ```
 
+```yaml
 kubectl apply -f - <<EOF
 apiVersion: apps/v1
 kind: Deployment
@@ -57,9 +58,11 @@ spec:
   selector:
     app: ovh-api
 EOF
+```
 
 Adding DNS record <local public ip> sandbox.apis.ovh
 
+```shell
 kubectl apply -f - <<EOF
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -78,3 +81,4 @@ spec:
           serviceName: ovh-api
           servicePort: 80
 EOF
+```
