@@ -1,4 +1,4 @@
-PyYAML==5.2
+PyYAML==5.4
 aiocache[memcached,msgpack]
 tornado==6.0.3
 flake8-mypy
